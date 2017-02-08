@@ -16,6 +16,12 @@ namespace FlexibleWidgets
 {
     public class ChartView : View
     {
+        public ChartView(Context context) :
+             base(context)
+        {
+            Initialize();
+        }
+
         public ChartView(Context context, IAttributeSet attrs) :
             base(context, attrs)
         {
