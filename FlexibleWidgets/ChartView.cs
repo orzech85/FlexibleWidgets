@@ -102,32 +102,52 @@ namespace FlexibleWidgets
             StrokeWidth = 5,
         };
 
+        private Paint _paintGrid = new Paint
+        {
+            StrokeWidth = 1
+        };
+
+        Rect chartRect = new Rect();
+
         protected override void OnDraw(Canvas canvas)
         {
-            _leftMargin = _paint.MeasureText(MinValue.ToString(ValueFormat)) * 1.2f;
-            _labelsCount = canvas.Height / (int)(_paint.TextSize * 3);
-            _labelsDistance = Range / (_labelsCount - 1);
-            _factor = canvas.Height / Range;
+            chartRect.Left = (int)(_paint.MeasureText(MinValue.ToString(ValueFormat)) * 1.2f);
+            chartRect.Right = canvas.Width;
+            chartRect.Top = (int)(2f * _paint.TextSize);
+            chartRect.Bottom = canvas.Height - chartRect.Top;
 
-            canvas.DrawLine(_leftMargin, 0, _leftMargin, canvas.Height, _paint);
+            _labelsCount = chartRect.Height() / (chartRect.Top * 2);
+            _labelsDistance = Range / (_labelsCount);
+            _factor = chartRect.Height() / Range;
 
+            canvas.DrawLine(chartRect.Left, chartRect.Top, chartRect.Left, chartRect.Bottom, _paint);
 
-            for (int i = 0; i < _labelsCount; i++)
+            for (int i = 0; i <= _labelsCount; i++)
             {
-                canvas.DrawText((MaxValue - (_labelsDistance) * i).ToString(ValueFormat), 0, 2 * _paint.TextSize + (canvas.Height / _labelsCount) * i, _paint);
+                canvas.DrawText((MaxValue - (_labelsDistance) * i).ToString(ValueFormat),
+                    0,
+                    chartRect.Top + (chartRect.Height() / _labelsCount) * i,
+                    _paint
+                    );
+                canvas.DrawLine(
+                    chartRect.Left,
+                    chartRect.Top + (chartRect.Height() / _labelsCount) * i,
+                    chartRect.Right,
+                    chartRect.Top + (chartRect.Height() / _labelsCount) * i,
+                    _paintGrid
+                    );
             }
 
-            float step = (canvas.Width - _leftMargin) / (Values.Count() - 1);
+            float step = (canvas.Width - chartRect.Left) / (Values.Count() - 1);
             int iterator = 0;
 
-
-            var lastY = (Values.FirstOrDefault() - MinValue) * _factor;
+            var lastY = (Values.FirstOrDefault() - MinValue) * _factor + chartRect.Top;
 
             foreach (var item in Values.Skip(1))
             {
-                var newItem = canvas.Height - (item - MinValue) * _factor;
+                var newItem = canvas.Height - (item - MinValue) * _factor - chartRect.Top;
 
-                canvas.DrawLine(_leftMargin + step * iterator, lastY, _leftMargin + step * (++iterator), newItem, _paint);
+                canvas.DrawLine(chartRect.Left + step * iterator, lastY, chartRect.Left + step * (++iterator), newItem, _paint);
 
                 lastY = newItem;
             }
