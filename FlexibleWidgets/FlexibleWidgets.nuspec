@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FlexibleIT.FlexibleWidgets</id>
+    <version>1.0.1</version>
+    <title>FlexibleWidgets for Xamarin.Android</title>
+    <authors>Michal Orzechowski</authors>
+    <owners>Michal Orzechowski</owners>
+	<projectUrl>https://github.com/orzech85/FlexibleWidgets</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Cool widgets for Xamarin.Android</description>
+    <copyright>Copyright 2017</copyright>
+  </metadata>
+  <files>
+    <file src="..\FlexibleWidgets\bin\Release\*.dll" target="lib\MonoAndroid10" />
+  </files>
+</package>
